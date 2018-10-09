@@ -3,7 +3,7 @@
 # Sequoia PGP wrapper for Nim
 import ospaths
 const SOURCE_DIR = currentSourcePath().splitPath.head & "/sequoia/lib"
-{.passL: "-L" & SOURCE_DIR & " -lsequoia_ffi".}
+{.passL: "-L" & SOURCE_DIR & " -lsequoia_ffi -lssl -lcrypto -lpthread -lnettle".}
 
 {.pragma: sequioa, cdecl, importc.}
 
