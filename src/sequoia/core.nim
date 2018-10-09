@@ -225,7 +225,7 @@ proc sq_reader_from_fd*(fd: cint): sq_reader_t {.sequioa.}
 ## /// Creates a reader from a buffer.
 ## /
 
-proc sq_reader_from_bytes*(buf: ptr uint8; len: csize): sq_reader_t {.sequioa.}
+proc sq_reader_from_bytes*(buf: ptr uint8; len: int): sq_reader_t {.sequioa.}
 ## /
 ## /// Frees a reader.
 ## /
@@ -236,7 +236,7 @@ proc sq_reader_free*(reader: sq_reader_t) {.sequioa.}
 ## /
 
 proc sq_reader_read*(ctx: sq_context_t; reader: sq_reader_t; buf: ptr uint8;
-                     len: csize): int {.sequioa.}
+                     len: int): int {.sequioa.}
 ## /
 ## /// A generic writer.
 ## /
@@ -261,7 +261,7 @@ proc sq_writer_from_fd*(fd: cint): sq_writer_t {.sequioa.}
 ## /// Creates a writer from a buffer.
 ## /
 
-proc sq_writer_from_bytes*(buf: ptr uint8; len: csize): sq_writer_t {.sequioa.}
+proc sq_writer_from_bytes*(buf: ptr uint8; len: int): sq_writer_t {.sequioa.}
 ## /
 ## /// Creates an allocating writer.
 ## ///
@@ -273,7 +273,7 @@ proc sq_writer_from_bytes*(buf: ptr uint8; len: csize): sq_writer_t {.sequioa.}
 ## /// destroyed.
 ## /
 
-proc sq_writer_alloc*(buf: ptr pointer; len: ptr csize): sq_writer_t {.sequioa.}
+proc sq_writer_alloc*(buf: ptr pointer; len: ptr int): sq_writer_t {.sequioa.}
 ## /
 ## /// Frees a writer.
 ## /
@@ -284,4 +284,4 @@ proc sq_writer_free*(writer: sq_writer_t) {.sequioa.}
 ## /
 
 proc sq_writer_write*(ctx: sq_context_t; writer: sq_writer_t; buf: ptr uint8;
-                      len: csize): int {.sequioa.}
+                      len: int): int {.sequioa.}

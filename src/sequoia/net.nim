@@ -26,7 +26,7 @@ proc sq_keyserver_new*(ctx: sq_context_t; uri: cstring): sq_keyserver_t {.sequio
 ## /
 
 proc sq_keyserver_with_cert*(ctx: sq_context_t; uri: cstring; cert: ptr uint8;
-                             len: csize): sq_keyserver_t {.sequioa.}
+                             len: int): sq_keyserver_t {.sequioa.}
 ## /
 ## /// Returns a handle for the SKS keyserver pool.
 ## ///

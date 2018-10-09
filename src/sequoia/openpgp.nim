@@ -58,7 +58,7 @@ type
 ## /// Reads a binary fingerprint.
 ## /
 
-proc sq_fingerprint_from_bytes*(buf: ptr uint8; len: csize): sq_fingerprint_t {.sequioa.}
+proc sq_fingerprint_from_bytes*(buf: ptr uint8; len: int): sq_fingerprint_t {.sequioa.}
 ## /
 ## /// Reads a hexadecimal fingerprint.
 ## /
@@ -86,7 +86,7 @@ proc sq_fingerprint_hash*(fingerprint: sq_fingerprint_t): uint64 {.sequioa.}
 ## /// long as the fingerprint is.
 ## /
 
-proc sq_fingerprint_as_bytes*(fp: sq_fingerprint_t; fp_len: ptr csize): ptr uint8 {.sequioa.}
+proc sq_fingerprint_as_bytes*(fp: sq_fingerprint_t; fp_len: ptr int): ptr uint8 {.sequioa.}
 ## /
 ## /// Converts the fingerprint to its standard representation.
 ## /
@@ -165,7 +165,7 @@ proc sq_armor_reader_from_file*(ctx: sq_context_t; filename: cstring;
 ## /// Creates a `Reader` from a buffer.
 ## /
 
-proc sq_armor_reader_from_bytes*(b: ptr uint8; len: csize; kind: sq_armor_kind_t): sq_reader_t {.sequioa.}
+proc sq_armor_reader_from_bytes*(b: ptr uint8; len: int; kind: sq_armor_kind_t): sq_reader_t {.sequioa.}
 ## /
 ## /// Returns the kind of data this reader is for.
 ## ///
@@ -189,7 +189,7 @@ proc sq_armor_reader_kind*(reader: sq_reader_t): sq_armor_kind_t {.sequioa.}
 ## /// both the array and the strings.
 ## /
 
-proc sq_armor_reader_headers*(ctx: sq_context_t; reader: sq_reader_t; len: ptr csize): ptr sq_armor_header_t {.sequioa.}
+proc sq_armor_reader_headers*(ctx: sq_context_t; reader: sq_reader_t; len: ptr int): ptr sq_armor_header_t {.sequioa.}
 ## /
 ## /// Constructs a new filter for the given type of data.
 ## ///
@@ -198,7 +198,7 @@ proc sq_armor_reader_headers*(ctx: sq_context_t; reader: sq_reader_t; len: ptr c
 
 proc sq_armor_writer_new*(ctx: sq_context_t; inner: sq_writer_t;
                          kind: sq_armor_kind_t; header: ptr sq_armor_header_t;
-                          header_len: csize): sq_writer_t {.sequioa.}
+                          header_len: int): sq_writer_t {.sequioa.}
 ##  openpgp::PacketPile.
 ## /
 ## /// A `PacketPile` holds a deserialized OpenPGP message.
@@ -235,7 +235,7 @@ proc sq_packet_pile_from_file*(ctx: sq_context_t; filename: cstring): sq_packet_
 ## /// See `sq_packet_pile_from_reader` for more details and caveats.
 ## /
 
-proc sq_packet_pile_from_bytes*(ctx: sq_context_t; b: ptr uint8; len: csize): sq_packet_pile_t {.sequioa.}
+proc sq_packet_pile_from_bytes*(ctx: sq_context_t; b: ptr uint8; len: int): sq_packet_pile_t {.sequioa.}
 ## /
 ## /// Frees the packet pile.
 ## /
@@ -301,7 +301,7 @@ proc sq_tpk_from_packet_pile*(ctx: sq_context_t; m: sq_packet_pile_t): sq_tpk_t 
 ## /// `buf` must be an OpenPGP-encoded TPK.
 ## /
 
-proc sq_tpk_from_bytes*(ctx: sq_context_t; b: ptr uint8; len: csize): sq_tpk_t {.sequioa.}
+proc sq_tpk_from_bytes*(ctx: sq_context_t; b: ptr uint8; len: int): sq_tpk_t {.sequioa.}
 ## /
 ## /// Frees the TPK.
 ## /
@@ -575,7 +575,7 @@ proc sq_p_key_keyid*(p: sq_p_key_t): sq_keyid_t {.sequioa.}
 ## /// `value_len` is not `NULL`, the size of value is stored there.
 ## /
 
-proc sq_user_id_value*(uid: sq_user_id_t; value_len: ptr csize): ptr uint8 {.sequioa.}
+proc sq_user_id_value*(uid: sq_user_id_t; value_len: ptr int): ptr uint8 {.sequioa.}
 ## /
 ## /// Returns the value of the User Attribute Packet.
 ## ///
@@ -583,7 +583,7 @@ proc sq_user_id_value*(uid: sq_user_id_t; value_len: ptr csize): ptr uint8 {.seq
 ## /// `value_len` is not `NULL`, the size of value is stored there.
 ## /
 
-proc sq_user_attribute_value*(ua: sq_user_attribute_t; value_len: ptr csize): ptr uint8 {.sequioa.}
+proc sq_user_attribute_value*(ua: sq_user_attribute_t; value_len: ptr int): ptr uint8 {.sequioa.}
 ## /
 ## /// Returns the session key.
 ## ///
@@ -594,8 +594,8 @@ proc sq_user_attribute_value*(ua: sq_user_attribute_t; value_len: ptr csize): pt
 ## /
 
 proc sq_skesk_decrypt*(ctx: sq_context_t; skesk: sq_skesk_t; password: ptr uint8;
-                      password_len: csize; algo: ptr uint8; key: ptr uint8;
-                       key_len: ptr csize): sq_status_t {.sequioa.}
+                      password_len: int; algo: ptr uint8; key: ptr uint8;
+                       key_len: ptr int): sq_status_t {.sequioa.}
   ##  XXX
 ##  openpgp::parse.
 ## /
@@ -649,7 +649,7 @@ proc sq_packet_parser_from_file*(ctx: sq_context_t; filename: cstring): sq_packe
 ## /// Starts parsing an OpenPGP message stored in a buffer.
 ## /
 
-proc sq_packet_parser_from_bytes*(ctx: sq_context_t; b: ptr uint8; len: csize): sq_packet_parser_result_t {.sequioa.}
+proc sq_packet_parser_from_bytes*(ctx: sq_context_t; b: ptr uint8; len: int): sq_packet_parser_result_t {.sequioa.}
 ## /
 ## /// If the `PacketParserResult` contains a `PacketParser`, returns it,
 ## /// otherwise, returns NULL.
@@ -821,7 +821,7 @@ proc sq_packet_parser_recurse*(ctx: sq_context_t; pp: sq_packet_parser_t;
 ## /
 
 proc sq_packet_parser_buffer_unread_content*(ctx: sq_context_t;
-                                             pp: sq_packet_parser_t; len: ptr csize): ptr uint8 {.sequioa.}
+                                             pp: sq_packet_parser_t; len: ptr int): ptr uint8 {.sequioa.}
 ## /
 ## /// Finishes parsing the current packet.
 ## ///
@@ -844,7 +844,7 @@ proc sq_packet_parser_finish*(ctx: sq_context_t; pp: sq_packet_parser_t;
 ## /
 
 proc sq_packet_parser_decrypt*(ctx: sq_context_t; pp: sq_packet_parser_t;
-                               algo: uint8; key: ptr uint8; key_len: csize): sq_status_t {.sequioa.}
+                               algo: uint8; key: ptr uint8; key_len: int): sq_status_t {.sequioa.}
   ##  XXX
 type
   sq_writer_stack_t* = pointer
@@ -861,7 +861,7 @@ proc sq_writer_stack_wrap*(writer: sq_writer_t): sq_writer_stack_t {.sequioa.}
 ## o/
 
 proc sq_writer_stack_write*(ctx: sq_context_t; writer: sq_writer_stack_t;
-                            buf: ptr uint8; len: csize): int {.sequioa.}
+                            buf: ptr uint8; len: int): int {.sequioa.}
 ## /
 ## /// Finalizes this writer, returning the underlying writer.
 ## /
@@ -891,13 +891,13 @@ proc sq_arbitrary_writer_new*(ctx: sq_context_t; inner: sq_writer_stack_t;
 ## /
 
 proc sq_signer_new*(ctx: sq_context_t; inner: sq_writer_stack_t;
-                    signers: ptr sq_tpk_t; signers_len: csize): sq_writer_stack_t {.sequioa.}
+                    signers: ptr sq_tpk_t; signers_len: int): sq_writer_stack_t {.sequioa.}
 ## /
 ## /// Creates a signer for a detached signature.
 ## /
 
 proc sq_signer_new_detached*(ctx: sq_context_t; inner: sq_writer_stack_t;
-                             signers: ptr sq_tpk_t; signers_len: csize): sq_writer_stack_t {.sequioa.}
+                             signers: ptr sq_tpk_t; signers_len: int): sq_writer_stack_t {.sequioa.}
 ## /
 ## /// Writes a literal data packet.
 ## ///
@@ -942,6 +942,6 @@ type ## /
 ## /
 
 proc sq_encryptor_new*(ctx: sq_context_t; inner: sq_writer_stack_t;
-                      passwords: cstringArray; passwords_len: csize;
-                      recipients: ptr sq_tpk_t; recipients_len: csize;
+                      passwords: cstringArray; passwords_len: int;
+                      recipients: ptr sq_tpk_t; recipients_len: int;
                        mode: sq_encryption_mode_t): sq_writer_stack_t {.sequioa.}
