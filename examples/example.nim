@@ -1,11 +1,9 @@
-## This is a port of sequoia's ffi example (https://gitlab.com/sequoia-pgp/sequoia/blob/master/ffi/examples/example.c)
-## Im not sure what is this used for yet
-
-import os, memfiles, sequoia
+import os, sequoia
 
 var
   err: sq_error_t
   ctx: sq_context_t
+  reader: sq_reader_t
   tpk: sq_tpk_t
 
 if paramCount() != 1:
@@ -20,15 +18,14 @@ ctx = sq_context_new("nim.sequoia.example", addr err)
 if ctx == nil:
   quit("Initializing sequoia failed: " & $sq_error_string(err), QuitFailure)
 
-var mm = memfiles.open(file)
+reader = sq_armor_reader_from_file(ctx, file, SQ_ARMOR_KIND_PUBLICKEY)
 
-tpk = sq_tpk_from_bytes(ctx, cast[ptr uint8](mm.mem), mm.size)
+tpk = sq_tpk_from_reader(ctx, reader)
 if tpk == nil:
   err = sq_context_last_error(ctx)
-  quit("sq_tpk_from_bytes: " & $sq_error_string(err), QuitFailure)
+  quit("sq_tpk_from_reader: " & $sq_error_string(err), QuitFailure)
 
 sq_tpk_dump(tpk)
 sq_tpk_free(tpk)
 sq_context_free(ctx)
-mm.close()
 
