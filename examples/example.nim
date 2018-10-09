@@ -16,7 +16,7 @@ let file = paramStr(1)
 if not file.fileExists():
   quit("File not found: " & file, QuitFailure)
 
-ctx = sq_context_new("nim.sequoia.example", addr err);
+ctx = sq_context_new("nim.sequoia.example", addr err)
 if ctx == nil:
   quit("Initializing sequoia failed: " & $sq_error_string(err), QuitFailure)
 
