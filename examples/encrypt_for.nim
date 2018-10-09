@@ -1,0 +1,54 @@
+import os, memfiles, sequoia
+
+var
+  use_armor = true
+  rc: sq_status_t
+  err: sq_error_t
+  ctx: sq_context_t
+  tpk: sq_tpk_t
+  sink: sq_writer_t
+  writer: sq_writer_stack_t
+  cipher: pointer
+  cipher_bytes: int
+
+if paramCount() != 1:
+  quit("Usage: " & paramStr(0) & " <keyfile> <plain >cipher" , QuitFailure)
+
+ctx = sq_context_new("nim.sequoia.example", addr err)
+if ctx == nil:
+  quit("Initializing sequoia failed: " & $sq_error_string(err), QuitFailure)
+
+
+let keyfile = paramStr(1)
+
+if not keyfile.fileExists():
+  quit("File not found: " & keyfile, QuitFailure)
+
+
+var mm = memfiles.open(keyfile)
+
+tpk = sq_tpk_from_bytes(ctx, cast[ptr uint8](mm.mem), mm.size)
+if tpk == nil:
+  err = sq_context_last_error(ctx)
+  quit("sq_tpk_from_bytes: " & $sq_error_string(err), QuitFailure)
+
+sink = sq_writer_alloc(addr cipher, addr cipher_bytes)
+
+if use_armor:
+  sink = sq_armor_writer_new(ctx, sink, SQ_ARMOR_KIND_MESSAGE, nil, 0)
+
+writer = sq_writer_stack_wrap(sink)
+writer = sq_encryptor_new(ctx, writer, nil, 0, addr tpk, 1, SQ_ENCRYPTION_MODE_FOR_TRANSPORT)
+if writer == nil:
+  err = sq_context_last_error(ctx)
+  quit("sq_encryptor_new: " & $sq_error_string(err), QuitFailure)
+
+writer = sq_literal_writer_new(ctx, writer)
+if writer == nil:
+  err = sq_context_last_error(ctx)
+  quit("sq_literal_writer_new: " & $sq_error_string(err), QuitFailure)
+
+sq_tpk_dump(tpk)
+sq_tpk_free(tpk)
+sq_context_free(ctx)
+mm.close()
