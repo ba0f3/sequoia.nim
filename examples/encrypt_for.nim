@@ -1,4 +1,4 @@
-import os, memfiles, sequoia
+import os, sequoia
 
 var
   use_armor = true
@@ -25,12 +25,17 @@ if not keyfile.fileExists():
   quit("File not found: " & keyfile, QuitFailure)
 
 
-var mm = memfiles.open(keyfile)
+var reader = sq_armor_reader_from_file(ctx, keyfile, SQ_ARMOR_KIND_PUBLICKEY)
 
-tpk = sq_tpk_from_bytes(ctx, cast[ptr uint8](mm.mem), mm.size)
+if reader == nil:
+  err = sq_context_last_error(ctx)
+  quit("sq_armor_reader_new: " & $sq_error_string(err), QuitFailure)
+
+tpk = sq_tpk_from_reader(ctx, reader)
+
 if tpk == nil:
   err = sq_context_last_error(ctx)
-  quit("sq_tpk_from_bytes: " & $sq_error_string(err), QuitFailure)
+  quit("sq_tpk_from_reader: " & $sq_error_string(err), QuitFailure)
 
 sink = sq_writer_alloc(addr cipher, addr cipher_bytes)
 
@@ -48,7 +53,19 @@ if writer == nil:
   err = sq_context_last_error(ctx)
   quit("sq_literal_writer_new: " & $sq_error_string(err), QuitFailure)
 
-sq_tpk_dump(tpk)
+var input = readAll(stdin)
+var written = sq_writer_stack_write(ctx, writer, cast[ptr uint8](addr input), input.len)
+if written < 0:
+  err = sq_context_last_error(ctx)
+  quit("sq_writer_stack_write: " & $sq_error_string(err), QuitFailure)
+
+rc = sq_writer_stack_finalize(ctx, writer)
+if rc != SQ_STATUS_SUCCESS:
+  err = sq_context_last_error(ctx)
+  quit("sq_writer_stack_write: " & $sq_error_string(err), QuitFailure)
+
+discard writeBuffer(stdout, cipher, cipher_bytes)
+
+#sq_tpk_dump(tpk)
 sq_tpk_free(tpk)
 sq_context_free(ctx)
-mm.close()
