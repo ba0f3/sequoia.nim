@@ -54,7 +54,7 @@ if writer == nil:
   quit("sq_literal_writer_new: " & $sq_error_string(err), QuitFailure)
 
 var input = readAll(stdin)
-var written = sq_writer_stack_write(ctx, writer, cast[ptr uint8](addr input), input.len)
+var written = sq_writer_stack_write(ctx, writer, cast[ptr uint8](addr input[0]), input.len)
 if written < 0:
   err = sq_context_last_error(ctx)
   quit("sq_writer_stack_write: " & $sq_error_string(err), QuitFailure)
