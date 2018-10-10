@@ -5,6 +5,7 @@ author        = "Huy Doan"
 description   = "Sequoia PGP wrapper for Nim"
 license       = "GPLv3"
 srcDir        = "src"
+skipDirs      = @["examples", "tests"]
 
 # Dependencies
 
