@@ -4,6 +4,9 @@ type                          ## /
     ##   /// The operation was successful.
     ##   /
   sq_status_t* = enum
+    SQ_STATUS_UNSUPPORTED_AEAD_ALGORITHM = -26, ## /
+                                             ##   /// Unsupport signature type.
+                                             ##   /
     SQ_STATUS_MANIPULATED_MESSAGE = -25, ## /
                                       ##   /// Malformed message.
                                       ##   /
@@ -43,7 +46,7 @@ type                          ## /
                                    ##   /// Invalid session key.
                                    ##   /
     SQ_STATUS_UNSUPPORTED_SYMMETRIC_ALGORITHM = -10, ## /
-                                                  ##   /// Unsupport signature type.
+                                                  ##   /// Unsupported AEAD algorithm.
                                                   ##   /
     SQ_STATUS_UNSUPPORTED_HASH_ALGORITHM = -9, ## /
                                             ##   /// Unsupported public key algorithm.

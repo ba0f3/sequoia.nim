@@ -727,15 +727,16 @@ proc sq_packet_parser_recursion_depth*(pp: sq_packet_parser_t): uint8 {.sequioa.
 ## ///
 ## ///   - A `Packet` holding the fully processed old packet;
 ## ///
-## ///   - The old packet's recursion depth;
-## ///
 ## ///   - A `PacketParser` holding the new packet;
 ## ///
-## ///   - And, the recursion depth of the new packet.
+## /// To determine the two packet's position within the parse tree,
+## /// you can use `last_path()` and `path()`, respectively.  To
+## /// determine their depth, you can use `last_recursion_depth()`
+## /// and `recursion_depth()`, respectively.
 ## ///
-## /// A recursion depth of 0 means that the packet is a top-level
-## /// packet, a recursion depth of 1 means that the packet is an
-## /// immediate child of a top-level-packet, etc.
+## /// Note: A recursion depth of 0 means that the packet is a
+## /// top-level packet, a recursion depth of 1 means that the packet
+## /// is an immediate child of a top-level-packet, etc.
 ## ///
 ## /// Since the packets are serialized in depth-first order and all
 ## /// interior nodes are visited, we know that if the recursion
@@ -780,9 +781,7 @@ proc sq_packet_parser_recursion_depth*(pp: sq_packet_parser_t): uint8 {.sequioa.
 
 proc sq_packet_parser_next*(ctx: sq_context_t; pp: sq_packet_parser_t;
                            old_packet: ptr sq_packet_t;
-                           old_recursion_level: ptr uint8;
-                           ppr: ptr sq_packet_parser_result_t;
-                            new_recursion_level: ptr uint8): sq_status_t {.sequioa.}
+                           ppr: ptr sq_packet_parser_result_t): sq_status_t {.sequioa.}
 ## /
 ## /// Finishes parsing the current packet and starts parsing the
 ## /// next one, recursing if possible.
@@ -808,9 +807,7 @@ proc sq_packet_parser_next*(ctx: sq_context_t; pp: sq_packet_parser_t;
 
 proc sq_packet_parser_recurse*(ctx: sq_context_t; pp: sq_packet_parser_t;
                               old_packet: ptr sq_packet_t;
-                              old_recursion_level: ptr uint8;
-                              ppr: ptr sq_packet_parser_result_t;
-                               new_recursion_level: ptr uint8): sq_status_t {.sequioa.}
+                              ppr: ptr sq_packet_parser_result_t): sq_status_t {.sequioa.}
 ## /
 ## /// Causes the PacketParser to buffer the packet's contents.
 ## ///
