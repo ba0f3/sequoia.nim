@@ -3,7 +3,7 @@
 # Sequoia PGP wrapper for Nim
 import ospaths
 when defined(SQ_DYNAMIC_LINK):
-  {.passL: "-lsequoia_ffi -lssl -lcrypto -lnettle -lhogweed -lgmp -lsqlite3 -lpthread".}
+  {.passL: "-lsequoia_ffi".}
 else:
   const LIB_DIR = currentSourcePath().splitPath.head & "/sequoia/lib"
   when hostCPU == "i386":
