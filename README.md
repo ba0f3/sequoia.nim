@@ -10,5 +10,5 @@ Sequoia PGP wrapper for Nim https://gitlab.com/sequoia-pgp
 
 ## Building
 
-By default this module uses statically linked libraries located at src/sequoia/lib, but you can switch to dynamically linked ones by toggling the  `SQ_DYMANIC_LINK` switch
+By default this module uses statically linked libraries located at src/sequoia/lib, but you can switch to dynamically linked ones by toggling the  `SQ_DYNAMIC_LINK` switch
 
