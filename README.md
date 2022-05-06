@@ -1,15 +1,14 @@
 # sequoia.nim
 Sequoia PGP wrapper for Nim https://gitlab.com/sequoia-pgp
-        
 
-## Dependences
+## Dependencies
 - nettle-dev
-- libsqilte3
+- libsqlite3
 - libssl
 - libcrypto
 - libpthread
 
 ## Building
 
-By default, this module uses static linked libraies provided in src/sequioa/lib, you can use dynamic linked with `SQ_DYMANIC_LINK` swtich
+By default this module uses statically linked libraries located at src/sequoia/lib, but you can switch to dynamically linked ones by toggling the  `SQ_DYNAMIC_LINK` switch
 
